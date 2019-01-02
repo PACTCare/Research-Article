@@ -25,8 +25,6 @@
         new FallbackIotaClient(
           new List<string>
             {
-              "https://invalid.node.com:443",
-              "https://peanut.iotasalad.org:14265",
               "http://node04.iotatoken.nl:14265",
               "http://node05.iotatoken.nl:16265",
               "https://nodes.thetangle.org:443",
