@@ -5,6 +5,7 @@
 
   <ScrollView>
     <StackLayout>
+      <Entry x:Name="Rounds"/>
       <Button Text="Start Routine" Clicked="Button_OnClicked"/>
       <ListView HasUnevenRows="True" SelectionMode="None" ItemsSource="{Binding Logs}">
         <ListView.ItemTemplate>

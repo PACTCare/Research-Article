@@ -20,7 +20,7 @@ namespace Jmir
 
     private async void Button_OnClicked(object sender, EventArgs e)
     {
-      ((MainPageViewModel)this.BindingContext).Run();
+      ((MainPageViewModel)this.BindingContext).Run(int.Parse(this.Rounds.Text));
     }
   }
 }

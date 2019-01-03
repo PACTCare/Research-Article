@@ -22,9 +22,10 @@
       }
     }
 
-    public void Run()
+    public void Run(int rounds)
     {
-      Task.Run(async () => await new SendingRoutine(new XamarinLogger(() => this.Logs = XamarinLogger.Logs)).RunAsync(2)).GetAwaiter().GetResult();
+      Task.Run(async () => await new SendingRoutine(new XamarinLogger(() => this.Logs = XamarinLogger.Logs)).RunAsync(rounds)).GetAwaiter()
+        .GetResult();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
