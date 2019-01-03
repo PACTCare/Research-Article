@@ -2,7 +2,7 @@
 {
   public class TimeObj
   {
-    public string CreateTime { get; set; }
-    public string AttachTime { get; set; }
+    public long CreateTime { get; set; }
+    public long AttachTime { get; set; }
   }
 }

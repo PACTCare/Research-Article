@@ -21,21 +21,28 @@
       while (n < rounds)
       {
         n++;
-        Console.WriteLine(n);
+        this.Logger.Log(n.ToString());
         timeList.Add(await mam.PublishMessage("Hello World"));
       }
 
-      Console.WriteLine("Create Time");
+      this.Logger.Log("Create Time");
+      long summedCreateTime = 0;
       foreach (var timeObj in timeList)
       {
-        Console.WriteLine(timeObj.CreateTime);
+        this.Logger.Log($"{timeObj.CreateTime:0000} Milliseconds");
+        summedCreateTime += long.Parse(timeObj.CreateTime.ToString());
       }
 
-      Console.WriteLine("Attach Time");
+      this.Logger.Log("Attach Time");
+      long summedAttachTime = 0;
       foreach (var timeObj in timeList)
       {
-        Console.WriteLine(timeObj.AttachTime);
+        this.Logger.Log($"{timeObj.AttachTime:0000} Milliseconds");
+        summedAttachTime += long.Parse(timeObj.AttachTime.ToString());
       }
+
+      this.Logger.Log($"Average Create Time: {summedCreateTime / rounds} milliseconds");
+      this.Logger.Log($"Average Create Time: {summedAttachTime / rounds} milliseconds");
     }
   }
 }

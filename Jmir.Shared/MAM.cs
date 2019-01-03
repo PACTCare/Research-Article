@@ -70,15 +70,14 @@
       var timer = Stopwatch.StartNew();
       var message = this.channel.CreateMessage(TryteString.FromUtf8String(text));
       timer.Stop();
-      var timespan = timer.Elapsed;
-      timeObj.CreateTime = $"{timespan.Seconds:00}{timespan.Milliseconds:00}";
+      timeObj.CreateTime = timer.ElapsedMilliseconds;
 
       // Publish Message
       timer = Stopwatch.StartNew();
       await this.channel.PublishAsync(message);
       timer.Stop();
-      timespan = timer.Elapsed;
-      timeObj.AttachTime = $"{timespan.Seconds:00}{timespan.Milliseconds:00}";
+      timeObj.AttachTime = timer.ElapsedMilliseconds;
+
       return timeObj;
     }
   }
