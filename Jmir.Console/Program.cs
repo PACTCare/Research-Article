@@ -14,7 +14,8 @@
     public static void Main(string[] args)
     {
       Console.WriteLine("Start Program");
-      Task.Run(async () => await new SendingRoutine(new ConsoleLogger()).RunAsync(NumberOfRuns)).GetAwaiter().GetResult();
+      Task.Run(async () => await new SendingRoutine(new ConsoleLogger(), new ConsoleProgressTracker(NumberOfRuns)).RunAsync(NumberOfRuns))
+        .GetAwaiter().GetResult();
 
       Console.ReadKey();
     }

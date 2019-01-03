@@ -20,16 +20,18 @@
 
     public async void Run(int rounds)
     {
-      await new SendingRoutine(new XamarinLogger(
-        () =>
-          {
-            var internalLogs = string.Empty;
-            foreach (var log in XamarinLogger.Logs)
+      await new SendingRoutine(
+        new XamarinLogger(
+          () =>
             {
-              internalLogs += $"\n {log.Message}";
-              this.Logs = internalLogs;
-            }
-          })).RunAsync(rounds);
+              var internalLogs = string.Empty;
+              foreach (var log in XamarinLogger.Logs)
+              {
+                internalLogs += $"\n {log.Message}";
+                this.Logs = internalLogs;
+              }
+            }),
+        new XamarinProgressTracker(rounds, progress => { this.Logs = progress; })).RunAsync(rounds);
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
