@@ -14,13 +14,22 @@ namespace Jmir
     public MainPage()
     {
       this.BindingContext = new MainPageViewModel();
-
       InitializeComponent();
+
+      this.StartButton.IsEnabled = true;
+      this.StartButton.Text = "Start Routine";
     }
 
-    private async void Button_OnClicked(object sender, EventArgs e)
+    private void Button_OnClicked(object sender, EventArgs e)
     {
+      if (string.IsNullOrEmpty(this.Rounds.Text))
+      {
+        return;
+      }
+
+      this.StartButton.IsEnabled = false;
       ((MainPageViewModel)this.BindingContext).Run(int.Parse(this.Rounds.Text));
+      this.StartButton.IsEnabled = true;
     }
   }
 }

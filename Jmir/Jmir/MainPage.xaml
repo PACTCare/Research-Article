@@ -5,8 +5,9 @@
 
   <ScrollView>
     <StackLayout>
-      <Entry x:Name="Rounds"/>
-      <Button Text="Start Routine" Clicked="Button_OnClicked"/>
+      <Entry x:Name="Rounds" Placeholder="Enter number of rounds"/>
+      <Button Clicked="Button_OnClicked" x:Name="StartButton" />
+      <Label Text="Running ..." IsVisible="False" x:Name="RunningLabel"/>
       <ListView HasUnevenRows="True" SelectionMode="None" ItemsSource="{Binding Logs}">
         <ListView.ItemTemplate>
           <DataTemplate>
