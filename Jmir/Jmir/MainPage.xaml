@@ -8,17 +8,7 @@
       <Entry x:Name="Rounds" Placeholder="Enter number of rounds"/>
       <Button Clicked="Button_OnClicked" x:Name="StartButton" />
       <Label Text="Running ..." IsVisible="False" x:Name="RunningLabel"/>
-      <ListView HasUnevenRows="True" SelectionMode="None" ItemsSource="{Binding Logs}">
-        <ListView.ItemTemplate>
-          <DataTemplate>
-            <ViewCell>
-              <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                <Label Text="{Binding Message}" VerticalOptions="Center"/>
-              </StackLayout>
-            </ViewCell>
-          </DataTemplate>
-        </ListView.ItemTemplate>
-      </ListView>
+      <Editor AutoSize="TextChanges" Text="{Binding Logs}" />
     </StackLayout>
   </ScrollView>
 </ContentPage>

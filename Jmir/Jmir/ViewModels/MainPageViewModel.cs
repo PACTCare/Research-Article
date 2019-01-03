@@ -1,18 +1,14 @@
 ﻿namespace Jmir.ViewModels
 {
-  using System.Collections.Generic;
   using System.ComponentModel;
   using System.Runtime.CompilerServices;
-  using System.Threading.Tasks;
-
-  using Jmir.Models;
   using Jmir.Shared;
 
   public class MainPageViewModel : INotifyPropertyChanged
   {
-    private List<Log> logs;
+    private string logs = string.Empty;
 
-    public List<Log> Logs
+    public string Logs
     {
       get => this.logs;
       set
@@ -22,10 +18,18 @@
       }
     }
 
-    public void Run(int rounds)
+    public async void Run(int rounds)
     {
-      Task.Run(async () => await new SendingRoutine(new XamarinLogger(() => this.Logs = XamarinLogger.Logs)).RunAsync(rounds)).GetAwaiter()
-        .GetResult();
+      await new SendingRoutine(new XamarinLogger(
+        () =>
+          {
+            var internalLogs = string.Empty;
+            foreach (var log in XamarinLogger.Logs)
+            {
+              internalLogs += $"\n {log.Message}";
+              this.Logs = internalLogs;
+            }
+          })).RunAsync(rounds);
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
