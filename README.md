@@ -1,3 +1,3 @@
 # IOTA Research-Article
 
-A simple console application to test the transaction times of IOTAs Masked Authenticated Messaging
+Simple applications to test the transaction times of IOTAs Masked Authenticated Messaging in combination with PACTs' IOTA FHIR implementation
