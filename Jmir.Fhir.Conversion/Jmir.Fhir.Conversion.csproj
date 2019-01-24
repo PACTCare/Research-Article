@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pact.Fhir.Core\Pact.Fhir.Core.csproj" />
+    <ProjectReference Include="..\Pact.Fhir.Iota\Pact.Fhir.Iota.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Hl7.Fhir.STU3.Core">
+      <HintPath>E:\NuGet\hl7.fhir.stu3\1.0.0\lib\netstandard2.0\Hl7.Fhir.STU3.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
