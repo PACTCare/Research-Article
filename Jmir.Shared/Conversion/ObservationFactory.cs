@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Jmir.Fhir.Conversion
+﻿namespace Jmir.Shared.Conversion
 {
+  using System;
   using System.Collections.Generic;
 
   using Common.Service.GattService;

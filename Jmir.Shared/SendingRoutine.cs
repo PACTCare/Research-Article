@@ -3,7 +3,11 @@
   using System;
   using System.Collections.Generic;
 
+  using Common.Service.GattService;
+
   using Hl7.Fhir.Model;
+
+  using Jmir.Shared.Conversion;
 
   using Pact.Fhir.Core.Usecase.CreateResource;
   using Pact.Fhir.Iota.Repository;
@@ -72,12 +76,17 @@
       var fhirRepository = new IotaFhirRepository(repository, new FhirJsonTryteSerializer(), new InMemoryResourceTracker());
       var resourceInteractor = new CreateResourceInteractor(fhirRepository);
 
+      var measurement = new GlucoseMeasurementValue { GlucoseConcentrationMolL = 5.4f, BaseTime = DateTime.UtcNow };
+
       var n = 0;
       while (n < rounds)
       {
         n++;
         this.Tracker.Update(n);
-        await resourceInteractor.ExecuteAsync(new CreateResourceRequest { Resource = Patient });
+
+        // The example sends an observation. Nevertheless it does not make a difference from a technical perspective
+        // what resource is sent, as long as its size fits on IOTA transaction
+        await resourceInteractor.ExecuteAsync(new CreateResourceRequest { Resource = ObservationFactory.FromMeasurement(measurement) });
       }
 
       foreach (var trackingEntry in fhirRepository.ResultTimes)

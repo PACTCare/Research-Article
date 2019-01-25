@@ -1,4 +1,4 @@
-﻿namespace Jmir.Fhir.Conversion
+﻿namespace Jmir.Shared.Conversion
 {
   using System.Collections.Generic;
   using System.Linq;

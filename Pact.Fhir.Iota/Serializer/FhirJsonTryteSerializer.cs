@@ -1,5 +1,8 @@
 ﻿namespace Pact.Fhir.Iota.Serializer
 {
+  using System;
+  using System.Diagnostics;
+
   using Hl7.Fhir.Model;
   using Hl7.Fhir.Serialization;
 
