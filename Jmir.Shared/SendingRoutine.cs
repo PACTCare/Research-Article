@@ -10,6 +10,7 @@
   using Jmir.Shared.Conversion;
 
   using Pact.Fhir.Core.Usecase.CreateResource;
+  using Pact.Fhir.Core.Usecase.ReadResource;
   using Pact.Fhir.Iota.Repository;
   using Pact.Fhir.Iota.Serializer;
 
@@ -50,6 +51,7 @@
         new FallbackIotaClient(
           new List<string>
             {
+              "https://nodes.thetangle.org:443",
               "http://node04.iotatoken.nl:14265",
               "http://node05.iotatoken.nl:16265",
               "https://nodes.thetangle.org:443",
@@ -75,8 +77,10 @@
 
       var fhirRepository = new IotaFhirRepository(repository, new FhirJsonTryteSerializer(), new InMemoryResourceTracker());
       var resourceInteractor = new CreateResourceInteractor(fhirRepository);
+      var readInteractor = new ReadResourceInteractor(fhirRepository);
 
       var measurement = new GlucoseMeasurementValue { GlucoseConcentrationMolL = 5.4f, BaseTime = DateTime.UtcNow };
+      var resourceId = string.Empty;
 
       var n = 0;
       while (n < rounds)
@@ -85,13 +89,24 @@
         this.Tracker.Update(n);
 
         // The example sends an observation. Nevertheless it does not make a difference from a technical perspective
-        // what resource is sent, as long as its size fits on IOTA transaction
-        await resourceInteractor.ExecuteAsync(new CreateResourceRequest { Resource = ObservationFactory.FromMeasurement(measurement) });
+        // what resource is sent, as long as its size fits one IOTA transaction
+        var response = await resourceInteractor.ExecuteAsync(new CreateResourceRequest { Resource = ObservationFactory.FromMeasurement(measurement) });
+        if (string.IsNullOrEmpty(resourceId))
+        {
+          resourceId = response.LogicalId;
+        }
       }
 
       foreach (var trackingEntry in fhirRepository.ResultTimes)
       {
         this.Logger.Log($"Create: {trackingEntry.CreateTime:0000} | Attach: {trackingEntry.AttachTime:0000}");
+      }
+
+      await readInteractor.ExecuteAsync(new ReadResourceRequest { ResourceId = resourceId });
+
+      foreach (var readEntry in fhirRepository.ReadTimes)
+      {
+        this.Logger.Log($"Read: {readEntry.ReadTime:0000}");
       }
     }
   }

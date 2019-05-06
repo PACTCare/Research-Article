@@ -33,6 +33,7 @@
       this.ChannelFactory = new MamChannelFactory(CurlMamFactory.Default, CurlMerkleTreeFactory.Default, repository);
       this.SubscriptionFactory = new MamChannelSubscriptionFactory(repository, CurlMamParser.Default, CurlMask.Default);
       this.ResultTimes = new List<TimeTrackingEntry>();
+      this.ReadTimes = new List<ReadTrackingEntry>();
     }
 
     // Working with low security level for the sake of speed
@@ -40,13 +41,14 @@
 
     private MamChannelFactory ChannelFactory { get; }
 
-    private IResourceTracker ResourceTracker { get; }
+    public IResourceTracker ResourceTracker { get; set; }
 
     private IFhirTryteSerializer Serializer { get; }
 
     private MamChannelSubscriptionFactory SubscriptionFactory { get; }
 
     public List<TimeTrackingEntry> ResultTimes { get; set; }
+    public List<ReadTrackingEntry> ReadTimes { get; set; }
 
     /// <inheritdoc />
     public override async Task<DomainResource> CreateResourceAsync(DomainResource resource)
@@ -85,18 +87,27 @@
     /// <inheritdoc />
     public override async Task<DomainResource> ReadResourceAsync(string id)
     {
+      UnmaskedAuthenticatedMessage message = null;
       // Get the tracked resource associated with the given id and filter the MAM root from that
-      var resourceEntry = this.ResourceTracker.GetEntry(id);
-      var resourceRoot = resourceEntry.MerkleRoots.First(r => r.Value.Contains(id));
+      foreach (var entry in this.ResourceTracker.Entries)
+      {
+        var timer = Stopwatch.StartNew();
+        timer.Start();
+        var resourceRoot = entry.MerkleRoots.First();
 
-      // now we can read the FHIR resource from the MAM stream
-      var subscription = this.SubscriptionFactory.Create(
-        resourceRoot,
-        Mode.Restricted,
-        resourceEntry.ChannelKey);
-      var message = await subscription.FetchSingle(resourceRoot);
+        // now we can read the FHIR resource from the MAM stream
+        var subscription = this.SubscriptionFactory.Create(
+          resourceRoot,
+          Mode.Restricted,
+          entry.ChannelKey);
 
-      return this.Serializer.Deserialize<DomainResource>(message.Message);
+        message = await subscription.FetchSingle(resourceRoot);
+        timer.Stop();
+        this.ReadTimes.Add(new ReadTrackingEntry { ReadTime = timer.ElapsedMilliseconds });
+      }
+
+      var resource = this.Serializer.Deserialize<DomainResource>(message.Message);
+      return resource;
     }
   }
 }

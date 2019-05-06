@@ -1,5 +1,7 @@
 ﻿namespace Pact.Fhir.Iota.Services
 {
+  using System.Collections.Generic;
+
   using Pact.Fhir.Iota.Entity;
 
   /// <summary>
@@ -7,6 +9,8 @@
   /// </summary>
   public interface IResourceTracker
   {
+    List<ResourceEntry> Entries { get; }
+
     void AddEntry(ResourceEntry entry);
 
     ResourceEntry GetEntry(string versionId);
